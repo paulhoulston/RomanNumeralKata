@@ -9,24 +9,34 @@ namespace RomanNumeralKata
 	{
 		private static readonly IDictionary<int, string> Digits = new Dictionary<int, string> {
 			{ 1,"I" },
+			{ 4,"IV" },
 			{ 5,"V" },
 			{ 10,"X" },
 			{ 50,"L" },
 			{ 100,"C" },
 			{ 500,"D" },
-			{ 1000,"M" },
+			{ 1000,"M" }
 		};
 
 		public string ConvertFrom (int valueToConvert)
 		{
-			foreach (var digit in Digits.OrderByDescending(digit => digit.Key)) {
+			var orderedDigits = Digits.OrderByDescending (digit => digit.Key).ToArray();
+			for (var i = 0; i < orderedDigits.Length; i++) {
+				var digit = orderedDigits [i];
 				var multipleOfDigit = (int)(valueToConvert / digit.Key);
-
 				if (multipleOfDigit > 0) {
-					return new string (digit.Value [0], multipleOfDigit);
+					return InstancesOfNumeral(multipleOfDigit, digit.Value);
 				}
 			}
 			throw new NotSupportedException (string.Format ("The Roman Numeral could not be parsed from value '{0}'", valueToConvert));
+		}
+
+		private string InstancesOfNumeral(int numberOfNumerals, string numeral) {
+			var output = "";
+			for (var i = 0; i < numberOfNumerals; i++) {
+				output += numeral;
+			}
+			return output;
 		}
 	}
 
@@ -42,8 +52,7 @@ namespace RomanNumeralKata
 			[TestCase(500, "D")]
 			[TestCase(1000, "M")]
 			public void then_I_get_the_expected_output(int valueToConvert, string expectedOutput){
-				var output = new RomanNumeral().ConvertFrom(valueToConvert);
-				Assert.AreEqual(expectedOutput, output);
+				Assert.AreEqual(expectedOutput, new RomanNumeral ().ConvertFrom (valueToConvert));
 			}
 		}
 
@@ -55,10 +64,16 @@ namespace RomanNumeralKata
 			[TestCase(300, "CCC")]
 			[TestCase(5000, "MMMMM")]
 			public void then_I_get_the_expected_output(int valueToConvert, string expectedOutput){
-				var output = new RomanNumeral().ConvertFrom(valueToConvert);
-				Assert.AreEqual(expectedOutput, output);
+				Assert.AreEqual(expectedOutput, new RomanNumeral ().ConvertFrom (valueToConvert));
 			}
 		}
 
+		class when_I_supply_the_value_of_four
+		{
+			[Test]
+			public void then_IV_is_returned(){
+				Assert.AreEqual("IV", new RomanNumeral ().ConvertFrom (4));
+			}
+		}
 	}
 }
