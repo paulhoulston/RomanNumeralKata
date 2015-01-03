@@ -27,16 +27,16 @@ namespace RomanNumeralKata
 		public string ConvertFrom (int valueToConvert)
 		{
 			var output = new StringBuilder();
-			var orderedDigits = Digits.OrderByDescending (digit => digit.Key).ToArray();
-			for (var i = 0; i < orderedDigits.Length; i++) {
-				var digit = orderedDigits [i];
-				var multipleOfDigit = (int)(valueToConvert / digit.Key);
-				if (multipleOfDigit > 0) {
-					InstancesOfNumeral(output, multipleOfDigit, digit.Value);
-					valueToConvert -= multipleOfDigit * digit.Key;
-				}
-			}
+			Action<KeyValuePair<int, string>> processNumeral = digit => ProcessNumeral (output, digit, ref valueToConvert);
+			Digits.OrderByDescending (digit => digit.Key).ToList().ForEach (processNumeral);
 			return output.ToString();
+		}
+
+		private void ProcessNumeral (StringBuilder output, KeyValuePair<int, string> digit, ref int valueToConvert)
+		{
+			var instancesOfNumeral = (int)(valueToConvert / digit.Key);
+			InstancesOfNumeral (output, instancesOfNumeral, digit.Value);
+			valueToConvert -= instancesOfNumeral * digit.Key;
 		}
 
 		private void InstancesOfNumeral(StringBuilder output, int numberOfNumerals, string numeral) {
@@ -69,10 +69,10 @@ namespace RomanNumeralKata
 			[TestCase(400, "CD")]
 			[TestCase(900, "CM")]
 			[TestCase(49, "XLIX")]
+			[TestCase(1981, "MCMLXXXI")]
 			public void then_I_get_the_expected_output(int valueToConvert, string expectedOutput){
 				Assert.AreEqual(expectedOutput, new RomanNumeral ().ConvertFrom (valueToConvert));
 			}
 		}
-
 	}
 }
