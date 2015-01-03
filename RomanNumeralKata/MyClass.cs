@@ -50,10 +50,15 @@ namespace RomanNumeralKata
 		class when_I_supply_a_simple_multiple_of_a_known_roman_digit
 		{
 			[TestCase(2, "II")]
+			[TestCase(3, "III")]
+			[TestCase(20, "XX")]
+			[TestCase(300, "CCC")]
+			[TestCase(5000, "MMMMM")]
 			public void then_I_get_the_expected_output(int valueToConvert, string expectedOutput){
 				var output = new RomanNumeral().ConvertFrom(valueToConvert);
 				Assert.AreEqual(expectedOutput, output);
 			}
 		}
+
 	}
 }
