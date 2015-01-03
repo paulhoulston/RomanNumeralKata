@@ -3,10 +3,11 @@ using NUnit.Framework;
 
 namespace RomanNumeralKata
 {
-	public class MyClass
+	class RomanNumeral
 	{
-		public MyClass ()
+		public object ConvertFrom (int valueToConvert)
 		{
+			return "I";
 		}
 	}
 
@@ -16,7 +17,7 @@ namespace RomanNumeralKata
 		{
 			[Test]
 			public void then_I_get_the_expected_output(){
-				var output = "";
+				var output = new RomanNumeral().ConvertFrom(1);
 				Assert.AreEqual("I", output);
 			}
 		}
