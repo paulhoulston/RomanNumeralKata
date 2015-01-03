@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RomanNumeralKata
 {
@@ -16,9 +17,16 @@ namespace RomanNumeralKata
 			{ 1000,"M" },
 		};
 
-		public object ConvertFrom (int valueToConvert)
+		public string ConvertFrom (int valueToConvert)
 		{
-			return Digits[valueToConvert];
+			foreach (var digit in Digits.OrderByDescending(digit => digit.Key)) {
+				var multipleOfDigit = (int)(valueToConvert / digit.Key);
+
+				if (multipleOfDigit > 0) {
+					return new string (digit.Value [0], multipleOfDigit);
+				}
+			}
+			throw new NotSupportedException (string.Format ("The Roman Numeral could not be parsed from value '{0}'", valueToConvert));
 		}
 	}
 
@@ -33,6 +41,15 @@ namespace RomanNumeralKata
 			[TestCase(100, "C")]
 			[TestCase(500, "D")]
 			[TestCase(1000, "M")]
+			public void then_I_get_the_expected_output(int valueToConvert, string expectedOutput){
+				var output = new RomanNumeral().ConvertFrom(valueToConvert);
+				Assert.AreEqual(expectedOutput, output);
+			}
+		}
+
+		class when_I_supply_a_simple_multiple_of_a_known_roman_digit
+		{
+			[TestCase(2, "II")]
 			public void then_I_get_the_expected_output(int valueToConvert, string expectedOutput){
 				var output = new RomanNumeral().ConvertFrom(valueToConvert);
 				Assert.AreEqual(expectedOutput, output);
