@@ -11,10 +11,15 @@ namespace RomanNumeralKata
 			{ 1,"I" },
 			{ 4,"IV" },
 			{ 5,"V" },
+			{ 9,"IX" },
 			{ 10,"X" },
+			{ 40,"XL" },
 			{ 50,"L" },
 			{ 100,"C" },
+			{ 90,"XC" },
+			{ 400,"CD" },
 			{ 500,"D" },
+			{ 900,"CM" },
 			{ 1000,"M" }
 		};
 
@@ -68,11 +73,16 @@ namespace RomanNumeralKata
 			}
 		}
 
-		class when_I_supply_the_value_of_four
+		class when_I_supply_the_value_of_single_roman_numeral_less_than_single_roman_numeral_preceeding_it
 		{
-			[Test]
-			public void then_IV_is_returned(){
-				Assert.AreEqual("IV", new RomanNumeral ().ConvertFrom (4));
+			[TestCase(4, "IV")]
+			[TestCase(9, "IX")]
+			[TestCase(40, "XL")]
+			[TestCase(90, "XC")]
+			[TestCase(400, "CD")]
+			[TestCase(900, "CM")]
+			public void then_I_get_the_expected_output(int valueToConvert, string expectedOutput){
+				Assert.AreEqual(expectedOutput, new RomanNumeral ().ConvertFrom (valueToConvert));
 			}
 		}
 	}
